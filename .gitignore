@@ -1,0 +1,13 @@
+# Datos privados y medios: NUNCA a GitHub
+input/dump.sql
+input/*.zip
+*.zip
+Diagonales 2016/
+Rock and Gol/
+Showbol/
+node_modules/
+dist/
+.DS_Store
+__pycache__/
+.pytest_cache/
+input/drive_map.json

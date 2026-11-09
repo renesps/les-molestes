@@ -1,0 +1,33 @@
+# Decisiones
+
+Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra, decime y la cambio.
+
+## Hito 1 — Datos
+
+**Archivos de entrada.** Los archivos estaban sueltos en la raíz del proyecto. Moví `dump.sql` y `Escudo.png` a `input/` y copié ahí `drive_map.json` desde Descargas. Las carpetas de fotos/videos y los `.zip` quedan donde estaban, pero git los ignora.
+
+**`input/drive_map.json` tampoco se sube a GitHub.** Tiene los IDs del Drive viejo (`old_folder_id`, `old_file_id`). La app usa `public/data/media.json`, que es la misma información pero limpia, sin esos IDs. Para regenerar los datos necesitás tener el `drive_map.json` en `input/`, igual que el dump.
+
+**Resultado de cada partido.** La base tiene el marcador dos veces: como texto (`result`, por ejemplo `3-1`) y como números (`goals_made` / `goals_received`). Comparé los dos en los 243 partidos y coinciden siempre. La app usa los números; si faltan, usa el texto; si faltan los dos, muestra "sin dato".
+
+**Ganado / empatado / perdido.** Sale del marcador. En los 2 partidos sin marcador completo (220 y 223, Diagonales 2016) uso el campo `final` de la base ("Derrota" en los dos), así el récord histórico suma 243 partidos sin inventar nada. En el detalle de esos partidos el marcador aparece como "sin dato".
+
+**Goles sin autor.** En 10 partidos de Diagonales 2016 hay menos goles cargados que en el marcador (faltan 14 en total). La app muestra el marcador real y, debajo, los goles que tienen autor más "N goles sin autor cargado".
+
+**"En Contra" (jugador 32).** Son goles en contra de los rivales a nuestro favor (hay 3). Cuentan en el marcador y aparecen en el partido como "Gol en contra", pero no son un jugador: no está en la lista de jugadores ni en ningún ranking.
+
+**Partidos jugados de un jugador.** Cuenta si fue titular, suplente, arquero o hizo un gol en ese partido. "Años en el club" = primer y último año en que jugó.
+
+**Copa.** Los partidos de copa no tienen fecha (`matchday`); se muestra la fase (`64vos`, `16vos`, etc.).
+
+**Fechas y hora.** Todas vienen con zona `-03` (Argentina no tiene horario de verano desde 2009). Se guardan como `2016-03-12T13:00:00-03:00` y la app las muestra en hora de Buenos Aires.
+
+**Nombre de las ediciones.** Armé nombres como "Rock and Gol 2018 · Torneo 3". La copa (edición 0) queda como "Copa Rock and Gol 2017".
+
+**Títulos.** En la base, las únicas ediciones con `position = 1` son justo `RnG-2018-03`, `RnG-2021-03` y `RnG-2022-01`, así que coinciden con lo que me pasaste. Uso tus etiquetas: "2018/19" (ese torneo se jugó de octubre 2018 a marzo 2019), "2021" y "2022".
+
+**Campos que no paso a la app.** `priority` y `priority_player` de los jugadores (parecen ser para ordenar en el admin viejo), los links viejos de Drive (`stats_match.media`, `stats_goal.link`) y todas las tablas `auth_*`, `django_*` y `admin_interface_*`.
+
+**Archivos JSON.** Un índice liviano `matches.json` (para la lista y los filtros) y un archivo por partido en `matches/<id>.json` (se carga cuando abrís el partido). Los rankings y datos curiosos ya vienen calculados en `stats.json`. Total: 1,2 MB, pero la pantalla de inicio solo necesita unos pocos KB.
+
+**Tests sin instalar nada.** Los tests usan solo Python (`python3 -m unittest discover -s tests -v`), no hace falta instalar `pytest`.
