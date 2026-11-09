@@ -63,3 +63,38 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 **Links externos:** todos pasan por `src/lib/openExternal.ts`, que además ignora cualquier link que no sea `https`.
 
 **Tests:** `npm test` corre los de la lógica (récord, rankings, fechas en hora argentina) y compara el récord calculado en la app con el del script de datos.
+
+## Hito 4 — Pantallas
+
+**Partidos.** Lista agrupada por año (el año queda fijo arriba al bajar) con el récord de cada año. A la vista quedan la búsqueda (por rival o torneo) y los circuitos; año, torneo, resultado, "con goles en video" y "con fotos" están en "Más filtros". Los filtros se guardan en la dirección: si entrás a un partido y volvés, siguen puestos. Arriba de la lista se ve el récord de lo filtrado. No hizo falta "virtualizar" la lista: con 243 partidos anda fluido en el celular.
+
+**Detalle de partido.** Marcador grande, resultado, fecha y hora (en hora de Buenos Aires), torneo y fecha o fase de copa. Debajo, botón de fotos, goles (autor, asistencia, penal o tiro libre, tiempo, marcador parcial y "▶ Ver gol"), tarjetas, titulares y suplentes, datos del partido (cancha, camiseta, arquero, esquema, clima) y las notas de la base. Al final, botones al partido anterior y al siguiente.
+- Si la carpeta de fotos se asoció por fecha y rival (no venía en la base), lo aclara en chiquito.
+- En los 15 partidos sin carpeta el botón no aparece.
+- Los goles sin autor se muestran como "N goles sin autor cargado".
+- Los goles en contra de los rivales aparecen como "Gol en contra (del rival)".
+
+**Video de gol.** Se abre en una ventana encima de la pantalla con el reproductor de Drive. Se cierra con ✕, tocando afuera o con Escape. Desde la base no hay forma de saber si un video se grabó vertical, así que hay un botón "Ver vertical / Ver horizontal" para acomodarlo sin deformarlo, además de "Abrir en Drive". Si Drive tarda más de 8 segundos, aparece un aviso sugiriendo abrirlo en Drive.
+
+**Fotos del partido:** el botón abre la carpeta de Drive con `openExternal`. No puse la vista de carpeta incrustada (`embeddedfolderview`): en celular se ve chica y suele pedir abrir Drive igual. Si la querés, se puede agregar.
+
+**Jugadores.** Dos vistas: Plantel (búsqueda; orden por goles, partidos o A–Z) y Rankings (goleadores históricos, por circuito, por año o por torneo; asistencias; presencias; arqueros; tarjetas). Los empates comparten puesto. La ficha muestra:
+- partidos, goles, asistencias, titular o suplente, promedio de gol, tarjetas, penales y tiros libres;
+- años en el club y circuitos;
+- si atajó: partidos al arco, vallas invictas y goles recibidos;
+- un gráfico de goles por año, sus goles en video y la lista de sus partidos.
+
+**Rivales.** Lista con búsqueda y orden (jugados, ganados, perdidos, A–Z). La ficha tiene el historial y la lista de partidos. Hay 159 equipos en la base, pero la lista muestra 158: uno no tiene partidos cargados.
+
+**Torneos.** Por circuito, cada edición con su récord, su zona y el puesto final si está en la base ("★ Campeón" en los 3 títulos). No hay tablas de posiciones porque la base no las tiene. En el torneo RnG 2024-4 aparecen las 3 carpetas de fotos de partidos que no están cargados, sin resultado.
+
+**Títulos.** Las 3 tarjetas (2018/19, 2021, 2022), con su récord, el acceso a los partidos y "🏆 Festejos" en 2021 y 2022.
+
+**Datos curiosos.**
+- Rachas: 12 triunfos seguidos y 14 partidos invicto.
+- 66 hat-tricks, goles de penal y de tiro libre, y goles en contra de los rivales.
+- La goleada más grande, la derrota más dura y el partido con más goles.
+- Récord según camiseta, clima y esquema.
+- `caco_level` y `toletole` se muestran con el nombre del campo de la base, sin interpretarlos, hasta que me digas qué significan.
+
+**Nombres de jugadores:** por ahora se muestran tal cual están en la base (nombre y apellido), hasta que decidas.

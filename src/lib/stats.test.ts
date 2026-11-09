@@ -53,3 +53,19 @@ describe('rankings', () => {
     expect(ranked).toEqual([1, 2, 2, 4])
   })
 })
+
+describe('multimedia en el índice de partidos', () => {
+  it('228 partidos con botón de fotos y 105 goles con video', () => {
+    expect(matches.filter((m) => m.hasMedia).length).toBe(228)
+    expect(matches.reduce((s, m) => s + m.videoGoals, 0)).toBe(105)
+  })
+})
+
+describe('títulos', () => {
+  it('exactamente 3, y coinciden con los torneos marcados como título', () => {
+    const titles = read<{ code: string; tournamentId: number }[]>('titles.json')
+    const tours = read<{ tournaments: { id: number; isTitle: boolean }[] }>('tournaments.json').tournaments
+    expect(titles.map((t) => t.code)).toEqual(['RnG-2018-03', 'RnG-2021-03', 'RnG-2022-01'])
+    expect(tours.filter((t) => t.isTitle).map((t) => t.id).sort()).toEqual(titles.map((t) => t.tournamentId).sort())
+  })
+})

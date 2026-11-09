@@ -64,7 +64,7 @@ export default function Home() {
               <ul className="list">
                 {top && (
                   <li>
-                    <Link to="/jugadores" className="row">
+                    <Link to="/jugadores?vista=rankings" className="row">
                       <span className="row-main">
                         <span>Goleadores</span>
                         <span className="muted small">{top.name}, {top.value} goles</span>

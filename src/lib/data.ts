@@ -31,6 +31,34 @@ export const api = {
   lookups: () => loadJson<Lookups>('lookups.json'),
 }
 
+/** Datos chicos que casi todas las pantallas necesitan, ya indexados por id. */
+export interface Base {
+  teams: Map<number, Team>
+  players: Map<number, Player>
+  tournaments: Map<number, Tournament>
+  circuits: Map<number, Circuit>
+  courts: Map<number, Lookups['courts'][number]>
+  shirts: Map<number, Lookups['shirts'][number]>
+}
+
+let basePromise: Promise<Base> | null = null
+export function loadBase(): Promise<Base> {
+  if (!basePromise) {
+    basePromise = Promise.all([api.teams(), api.players(), api.tournaments(), api.lookups()]).then(
+      ([teams, players, tours, lookups]) => ({
+        teams: new Map(teams.map((t) => [t.id, t])),
+        players: new Map(players.map((p) => [p.id, p])),
+        tournaments: new Map(tours.tournaments.map((t) => [t.id, t])),
+        circuits: new Map(tours.circuits.map((c) => [c.id, c])),
+        courts: new Map(lookups.courts.map((c) => [c.id, c])),
+        shirts: new Map(lookups.shirts.map((s) => [s.id, s])),
+      }),
+    )
+    basePromise.catch(() => (basePromise = null))
+  }
+  return basePromise
+}
+
 export type LoadState<T> =
   | { status: 'loading' }
   | { status: 'error'; error: Error; retry: () => void }
