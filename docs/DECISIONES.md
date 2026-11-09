@@ -45,3 +45,21 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 **Tipografía.** La del sistema (en iPhone, San Francisco), así se siente como una app de iOS y no se descarga nada de afuera. Para el nombre del club uso la serif del sistema (en iPhone, "New York"), que recuerda a las letras del escudo. Los números de estadísticas usan cifras de ancho fijo (`.tabular`) para que las columnas queden alineadas.
 
 **Íconos generados** (`scripts/make_icons.py`): `public/logo.png` (20 KB, transparente), íconos de la PWA de 192 y 512 (normal y "maskable", con el escudo dentro de la zona segura para que Android no lo recorte), `apple-touch-icon.png` de 180, favicons, y para Capacitor `resources/icon.png` (1024, sin transparencia, como pide la App Store) más `splash.png` / `splash-dark.png` (2732).
+
+## Hito 3 — Esqueleto de la app
+
+**Herramientas:** Vite + React + TypeScript, como pediste. No sumé librerías de íconos ni de componentes: los íconos de la barra son dibujos SVG propios y los estilos son CSS común. Así la app pesa poco (unos 85 KB comprimida) y no depende de nadie.
+
+**Navegación:** `HashRouter` (las direcciones quedan como `…/#/partidos/12`), que funciona en GitHub Pages y en Capacitor sin configurar nada. Barra inferior con Inicio · Partidos · Jugadores · Torneos · Más. Rivales, Títulos y Datos curiosos se abren desde Más (Títulos también desde Torneos e Inicio), y mientras estás en esas pantallas queda marcada la pestaña correspondiente. Las pantallas de detalle tienen "‹ Atrás" arriba, como en iOS.
+
+**Pantallas de este hito:** Inicio y Más ya funcionan con datos reales. Las demás muestran "En construcción" hasta el hito 4.
+
+**No invento datos:** no puse "La Plata" en ningún texto de la app porque no está en la base (solo sé que vos vivís ahí). Si querés que diga la ciudad, decime.
+
+**Modo sin conexión:** un service worker propio (`sw/sw.template.js`), sin librerías. Al instalarse guarda la app y todos los datos (268 archivos, unos 1,3 MB), así después anda sin conexión. Fotos y videos de Drive siguen necesitando internet. Los datos se muestran desde lo guardado y se actualizan en segundo plano ("stale-while-revalidate"). Cada build tiene una versión nueva y borra lo viejo. Dentro de Capacitor no se activa, porque ahí los archivos ya están en el teléfono.
+
+**Versión de la app:** sale de `package.json` (`0.1.0`) y se ve en Más.
+
+**Links externos:** todos pasan por `src/lib/openExternal.ts`, que además ignora cualquier link que no sea `https`.
+
+**Tests:** `npm test` corre los de la lógica (récord, rankings, fechas en hora argentina) y compara el récord calculado en la app con el del script de datos.
