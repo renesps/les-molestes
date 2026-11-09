@@ -14,20 +14,47 @@ export default function More() {
     <Page title="Más">
       <ul className="list">
         <li>
-          <Link to="/rivales" className="row">
-            <span className="row-main">Rivales</span>
+          <Link to="/jugadores" className="row">
+            <span className="row-main">
+              <span>Jugadores</span>
+              <span className="muted small">Plantel y rankings</span>
+            </span>
+            <IconChevron />
+          </Link>
+        </li>
+        <li>
+          <Link to="/torneos" className="row">
+            <span className="row-main">
+              <span>Torneos</span>
+              <span className="muted small">Por circuito y edición</span>
+            </span>
             <IconChevron />
           </Link>
         </li>
         <li>
           <Link to="/titulos" className="row">
-            <span className="row-main">Títulos</span>
+            <span className="row-main">
+              <span>Títulos</span>
+              <span className="muted small">★★★ Palmarés</span>
+            </span>
+            <IconChevron />
+          </Link>
+        </li>
+        <li>
+          <Link to="/rivales" className="row">
+            <span className="row-main">
+              <span>Rivales</span>
+              <span className="muted small">Historial contra cada equipo</span>
+            </span>
             <IconChevron />
           </Link>
         </li>
         <li>
           <Link to="/curiosidades" className="row">
-            <span className="row-main">Datos curiosos</span>
+            <span className="row-main">
+              <span>Datos curiosos</span>
+              <span className="muted small">Rachas, goleadas, hat-tricks</span>
+            </span>
             <IconChevron />
           </Link>
         </li>

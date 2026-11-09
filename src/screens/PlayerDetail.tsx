@@ -4,18 +4,19 @@ import { Stat, StatGrid } from '../components/Bits'
 import { MatchRow } from '../components/MatchRow'
 import { Page } from '../components/Page'
 import { Async, Empty } from '../components/States'
-import { usePlayVideo } from '../components/VideoModal'
+import { GoalList } from '../components/GoalList'
 import { api, loadBase, useData, type Base } from '../lib/data'
-import { formatDate } from '../lib/format'
+import { playerStats, type Fact } from '../lib/explore'
+import { CardList } from './StatsExplorer'
 import type { MatchSummary, Player, Stats } from '../lib/types'
 import { initials } from './Players'
 
 export default function PlayerDetail() {
   const id = Number(useParams().id)
-  const state = useData(() => Promise.all([loadBase(), api.matches(), api.stats()]), [])
+  const state = useData(() => Promise.all([loadBase(), api.matches(), api.stats(), api.facts()]), [])
   return (
     <Async state={state}>
-      {([base, matches, stats]) => {
+      {([base, matches, stats, facts]) => {
         const p = base.players.get(id)
         if (!p)
           return (
@@ -25,7 +26,7 @@ export default function PlayerDetail() {
           )
         return (
           <Page title={p.name} back>
-            <Profile p={p} base={base} matches={matches} stats={stats} />
+            <Profile p={p} base={base} matches={matches} stats={stats} facts={facts} />
           </Page>
         )
       }}
@@ -33,8 +34,8 @@ export default function PlayerDetail() {
   )
 }
 
-function Profile({ p, base, matches, stats }: { p: Player; base: Base; matches: MatchSummary[]; stats: Stats }) {
-  const play = usePlayVideo()
+function Profile({ p, base, matches, stats, facts }: { p: Player; base: Base; matches: MatchSummary[]; stats: Stats; facts: Map<number, Fact> }) {
+  const ps = playerStats(p.id, matches, facts)
   const [showAll, setShowAll] = useState(false)
   const byId = new Map(matches.map((m) => [m.id, m]))
   const played = p.matchIds.map((id) => byId.get(id)).filter((m): m is MatchSummary => !!m).reverse()
@@ -109,12 +110,19 @@ function Profile({ p, base, matches, stats }: { p: Player; base: Base; matches: 
         </>
       )}
 
-      {p.videoGoals.length > 0 && (
+      <h2 className="section-title">Goles ({ps.goals.length})</h2>
+      <GoalList goals={ps.goals} base={base} byId={byId} playerName={p.name} />
+
+      {(ps.yellow.length > 0 || ps.red.length > 0) && (
         <>
-          <h2 className="section-title">Goles en video ({p.videoGoals.length})</h2>
-          <VideoGoals p={p} base={base} byId={byId} onPlay={play} />
+          <h2 className="section-title">Tarjetas ({ps.yellow.length + ps.red.length})</h2>
+          <CardList yellow={ps.yellow} red={ps.red} base={base} byId={byId} />
         </>
       )}
+
+      <Link to={`/estadisticas?j=${p.id}`} className="btn btn-block stats-btn">
+        Ver sus estadísticas por torneo, año, cancha y rival
+      </Link>
 
       <h2 className="section-title">Partidos ({played.length})</h2>
       {played.length === 0 ? (
@@ -134,54 +142,5 @@ function Profile({ p, base, matches, stats }: { p: Player; base: Base; matches: 
         </>
       )}
     </>
-  )
-}
-
-function VideoGoals({
-  p,
-  base,
-  byId,
-  onPlay,
-}: {
-  p: Player
-  base: Base
-  byId: Map<number, MatchSummary>
-  onPlay: ReturnType<typeof usePlayVideo>
-}) {
-  const [loading, setLoading] = useState<number | null>(null)
-  const list = [...p.videoGoals].sort((a, b) => (byId.get(b.matchId)?.date ?? '').localeCompare(byId.get(a.matchId)?.date ?? ''))
-  return (
-    <ul className="list">
-      {list.map((vg) => {
-        const m = byId.get(vg.matchId)
-        const rival = m ? base.teams.get(m.rivalId)?.name : undefined
-        return (
-          <li key={vg.goalId}>
-            <button
-              type="button"
-              className="row"
-              disabled={loading === vg.goalId}
-              onClick={async () => {
-                setLoading(vg.goalId)
-                try {
-                  const detail = await api.match(vg.matchId)
-                  const g = detail.goals.find((x) => x.id === vg.goalId)
-                  if (g?.video) onPlay({ video: g.video, title: p.name, subtitle: `vs ${rival ?? 'sin dato'} · ${m ? formatDate(m.date) : ''}` })
-                } finally {
-                  setLoading(null)
-                }
-              }}
-            >
-              <span className="play-dot" aria-hidden="true">▶</span>
-              <span className="row-main">
-                <span>vs {rival ?? 'sin dato'}</span>
-                <span className="muted small tabular">{m ? formatDate(m.date) : ''}</span>
-              </span>
-              {loading === vg.goalId && <span className="spinner spinner-sm" aria-label="Cargando" />}
-            </button>
-          </li>
-        )
-      })}
-    </ul>
   )
 }

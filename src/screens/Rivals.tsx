@@ -97,11 +97,6 @@ export function RivalDetail() {
         return (
           <Page title={t.name} back>
             <RecordCard r={t.record} title={`Historial contra ${t.name}`} />
-            {t.cacoLevel && (
-              <p className="muted small center note">
-                Nivel caco (dato de la base): <strong>{t.cacoLevel}</strong>
-              </p>
-            )}
             <h2 className="section-title">Partidos</h2>
             <ul className="list">
               {ms.map((m) => (

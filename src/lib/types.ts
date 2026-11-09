@@ -27,7 +27,6 @@ export interface MatchSummary {
   hasMedia: boolean
   videoGoals: number
   goalsDetailed: number
-  toletole: boolean
 }
 
 export interface GoalVideo {
@@ -91,7 +90,6 @@ export interface Player {
 export interface Team {
   id: number
   name: string
-  cacoLevel: string | null
   record: Record
   matchIds: number[]
   circuits: number[]

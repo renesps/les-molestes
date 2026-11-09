@@ -22,7 +22,7 @@ export default function Players() {
     setParams(next, { replace: true })
   }
   return (
-    <Page title="Jugadores">
+    <Page title="Jugadores" back>
       <Segmented<View>
         label="Vista"
         value={view}

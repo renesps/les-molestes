@@ -18,7 +18,7 @@ export function positionLabel(t: Tournament): string | null {
 export function Tournaments() {
   const state = useData(() => Promise.all([api.tournaments(), api.titles()]), [])
   return (
-    <Page title="Torneos">
+    <Page title="Torneos" back>
       <Async state={state}>
         {([{ circuits, tournaments }, titles]) => (
           <>

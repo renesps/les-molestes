@@ -95,7 +95,7 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 - 66 hat-tricks, goles de penal y de tiro libre, y goles en contra de los rivales.
 - La goleada más grande, la derrota más dura y el partido con más goles.
 - Récord según camiseta, clima y esquema.
-- `caco_level` y `toletole` se muestran con el nombre del campo de la base, sin interpretarlos, hasta que me digas qué significan.
+- `caco_level` y `toletole` no se usan (ver más abajo).
 
 **Nombres de jugadores:** completos, tal cual están en la base (decisión de René, 09/11/2026). La web es pública: cualquiera con el link los ve.
 
@@ -119,3 +119,23 @@ El navegador de la prueba está en hora de Madrid a propósito: así se comprueb
 **Auditoría de publicación** (`python3 scripts/audit_public.py`). Busca en todo lo que se publica los IDs del Drive viejo (los de la base y los `old_*` del mapa), los datos de las cuentas del admin, cualquier mail o contraseña y los colores viejos. Resultado: 0 problemas en 553 archivos.
 
 **Capturas:** quedan en `docs/capturas/` (22 imágenes, 3,3 MB). No se publican en la web; son para que veas cómo quedó.
+
+## Buscar y Estadísticas (pedido después del hito 6)
+
+**Pestañas nuevas.** iOS recomienda hasta 5 pestañas, así que quedaron **Inicio · Partidos · Buscar · Estadísticas · Más**. Jugadores, Torneos, Títulos, Rivales y Datos curiosos pasaron a **Más**, y además se llega a todos desde Buscar y desde Estadísticas.
+
+**Buscar.** Busca jugadores, rivales, torneos (por nombre o código, como `RnG-2018-03`), circuitos, años, canchas y camisetas, sin importar tildes ni mayúsculas. Si hay un resultado claro (nombre exacto, o uno solo), lo muestra desplegado arriba:
+- un **jugador**, con sus números (partidos, goles, asistencias, tarjetas, goles en video, cómo le fue al equipo con él en cancha) y accesos a su ficha y a sus estadísticas;
+- un **rival, torneo, año, cancha o camiseta**, con el récord y **todos los partidos**.
+
+Si hay varios parecidos (por ejemplo "Echegaray": Manuel y Valentino), los muestra a todos agrupados por tipo, sin elegir por vos. La búsqueda queda en la dirección, así al volver de un partido sigue ahí.
+
+**Estadísticas.** Un explorador: elegís "Todo el club" o un jugador y lo cruzás con cualquier combinación de circuito, torneo, año, cancha, rival y camiseta. Cada menú ofrece solo opciones que tienen partidos con lo ya elegido, y tocando cualquier fila de un desglose o un nombre de un ranking se agrega ese filtro.
+- **Club:** récord, promedios, goles de penal y tiro libre, rachas, mejor victoria y peor derrota, rankings (goleadores, asistencias, presencias, tarjetas, arqueros), desglose por año, circuito, torneo, cancha, camiseta y rival, y la lista de partidos.
+- **Jugador:** sus números, cómo le fue al equipo cuando jugó, como arquero, **todos sus goles** (con "▶ Ver gol" y filtro "solo con video"), **todas sus tarjetas**, "socios" (quién le dio más asistencias y a quién asistió más), desglose por año, circuito, torneo, cancha y rival (partidos y goles) y sus partidos.
+
+**Ficha del jugador.** Ahora también lista todos sus goles y todas sus tarjetas, con un botón a sus estadísticas filtrables.
+
+**Datos para esto:** `public/data/facts.json` (35 KB), un resumen de cada partido (cancha, camiseta, arquero, alineación, goles, tarjetas) que genera `build_data.py`. Así las estadísticas se calculan en el celular, sin bajar los 243 archivos de partido, y andan sin conexión. Los tests comparan estos cálculos con los del script de datos para los 57 jugadores.
+
+**`toletole` y `caco_level`:** a pedido de René, se ignoran por completo. El script no los pasa a los datos y la app no los muestra.

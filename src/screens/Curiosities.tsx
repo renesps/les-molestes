@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { RecordInline, Stat, StatGrid } from '../components/Bits'
-import { MatchRow } from '../components/MatchRow'
 import { Page } from '../components/Page'
 import { Async } from '../components/States'
 import { api, loadBase, useData, type Base } from '../lib/data'
@@ -18,8 +17,6 @@ interface Streak {
   toMatchId: number | null
 }
 interface Curiosities {
-  toletole: { matchIds: number[]; record: Record; meaningConfirmed: boolean }
-  cacoLevel: { byLevel: Group[]; teams: { teamId: number; name: string; level: string }[]; meaningConfirmed: boolean }
   byWeather: Group[]
   byShirt: Group[]
   byFormation: Group[]
@@ -73,7 +70,6 @@ function Body({ c, matches, base }: { c: Curiosities; matches: MatchSummary[]; b
     const b = s.toMatchId ? feat(s.toMatchId) : undefined
     return a && b ? `del ${formatDate(a.date)} al ${formatDate(b.date)}` : ''
   }
-  const toletole = c.toletole.matchIds.map((id) => byId.get(id)).filter((m): m is MatchSummary => !!m)
   const hatByPlayer = new Map<string, number>()
   c.hatTricks.forEach((h) => hatByPlayer.set(h.name, (hatByPlayer.get(h.name) ?? 0) + 1))
   const topHat = c.hatTricks[0]
@@ -146,21 +142,6 @@ function Body({ c, matches, base }: { c: Curiosities; matches: MatchSummary[]; b
       <GroupTable title="Según el clima" groups={c.byWeather} note="Solo partidos con clima cargado." />
       <GroupTable title="Según el esquema inicial" groups={c.byFormation} />
 
-      <GroupTable
-        title="Según el nivel caco del rival"
-        groups={c.cacoLevel.byLevel}
-        note={`Campo "caco_level" de la base, cargado en ${c.cacoLevel.teams.length} rivales.`}
-      />
-
-      <h2 className="section-title">Partidos marcados como "toletole"</h2>
-      <p className="muted small note">
-        Campo "toletole" de la base: {toletole.length} partidos · <RecordInline r={c.toletole.record} />
-      </p>
-      <ul className="list">
-        {toletole.map((m) => (
-          <MatchRow key={m.id} m={m} base={base} />
-        ))}
-      </ul>
     </>
   )
 }

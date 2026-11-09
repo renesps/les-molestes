@@ -90,7 +90,17 @@ export function DriveFolderButton({ url, label, note }: { url: string; label: st
   )
 }
 
-export function SearchBox({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
+export function SearchBox({
+  value,
+  onChange,
+  placeholder,
+  autoFocus,
+}: {
+  value: string
+  onChange: (v: string) => void
+  placeholder: string
+  autoFocus?: boolean
+}) {
   return (
     <label className="search">
       <span className="visually-hidden">{placeholder}</span>
@@ -104,10 +114,11 @@ export function SearchBox({ value, onChange, placeholder }: { value: string; onC
         autoCorrect="off"
         spellCheck={false}
         enterKeyHint="search"
+        autoFocus={autoFocus}
       />
       {value && (
         <button type="button" className="search-clear" onClick={() => onChange('')} aria-label="Borrar búsqueda">
-          ✕
+          <span aria-hidden="true">✕</span>
         </button>
       )}
     </label>

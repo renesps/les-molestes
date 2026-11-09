@@ -10,6 +10,8 @@ Escribe: public/data/*.json                  (depurados, sí van a git)
 
 Solo usa la librería estándar de Python. Si alguna cifra de control no da,
 el script se corta con un error y no escribe nada.
+
+Los campos toletole (stats_match) y caco_level (stats_team) se ignoran a pedido de René.
 """
 from __future__ import annotations
 
@@ -233,7 +235,6 @@ def build(tables: dict, drive: dict):
             "goalkeeperId": _int(r["goalkeeper_id"]),
             "weather": r["weather"],
             "formation": r["esquema_inicial"],
-            "toletole": _bool(r["toletole"]),
             "notes": r["notes"].replace("\r\n", "\n").strip() if r["notes"] and r["notes"].strip() else None,
             "starters": sorted(starters.get(mid, [])),
             "bench": sorted(bench.get(mid, [])),
@@ -408,7 +409,7 @@ def aggregate(circuits, courts, shirts, teams_raw, players_raw, tournaments, mat
     teams_out = []
     for tid, t in sorted(teams_raw.items(), key=lambda kv: kv[1]["name"].lower()):
         tm = by_rival.get(tid, [])
-        teams_out.append({"id": tid, "name": t["name"], "cacoLevel": t["caco_level"],
+        teams_out.append({"id": tid, "name": t["name"],
                           "record": record_of(tm), "matchIds": [m["id"] for m in tm],
                           "circuits": sorted({m["circuitId"] for m in tm})})
 
@@ -482,7 +483,6 @@ def aggregate(circuits, courts, shirts, teams_raw, players_raw, tournaments, mat
         return [{"key": k, "label": names[k] if names else k, "record": record_of(v)}
                 for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1]))]
 
-    caco_by_team = {tid: t["caco_level"] for tid, t in teams_raw.items()}
     known = [m for m in ms if m["goalsFor"] is not None and m["goalsAgainst"] is not None]
     biggest_win = max(known, key=lambda m: (m["goalsFor"] - m["goalsAgainst"], m["goalsFor"]))
     biggest_loss = min(known, key=lambda m: (m["goalsFor"] - m["goalsAgainst"], -m["goalsAgainst"]))
@@ -509,14 +509,6 @@ def aggregate(circuits, courts, shirts, teams_raw, players_raw, tournaments, mat
     hat.sort(key=lambda h: (-h["goals"], matches[h["matchId"]]["date"]))
 
     curiosities = {
-        "toletole": {"matchIds": [m["id"] for m in ms if m["toletole"]],
-                     "record": record_of([m for m in ms if m["toletole"]]),
-                     "meaningConfirmed": False},
-        "cacoLevel": {"byLevel": group_record(lambda m: caco_by_team.get(m["rivalId"])),
-                      "teams": [{"teamId": tid, "name": t["name"], "level": t["caco_level"]}
-                                for tid, t in sorted(teams_raw.items(), key=lambda kv: kv[1]["name"])
-                                if t["caco_level"]],
-                      "meaningConfirmed": False},
         "byWeather": group_record(lambda m: m["weather"]),
         "byShirt": group_record(lambda m: m["shirtId"], {k: v["name"] for k, v in shirts.items()}),
         "byFormation": group_record(lambda m: m["formation"]),
@@ -659,10 +651,20 @@ def main():
         {**{k: m[k] for k in index_keys},
          "hasMedia": m["media"] is not None,
          "videoGoals": sum(1 for g in m["goals"] if g["video"]),
-         "goalsDetailed": m["goalsDetailed"],
-         "toletole": m["toletole"]} for m in ms])
+         "goalsDetailed": m["goalsDetailed"]} for m in ms])
     for m in ms:
         write_json(OUT / "matches" / f"{m['id']}.json", m)
+    # Hechos compactos de cada partido, para las estadísticas filtrables y la búsqueda
+    # (evita tener que bajar los 243 archivos de detalle). Formato de cada gol:
+    # [goalId, autor (0 = en contra del rival), asistencia (0 = sin dato), penal, tiro libre, tiene video]
+    write_json(OUT / "facts.json", [
+        {"id": m["id"], "court": m["courtId"], "shirt": m["shirtId"], "gk": m["goalkeeperId"],
+         "st": m["starters"], "bn": m["bench"],
+         "g": [[g["id"], g["playerId"] or 0, g["assistId"] or 0, int(g["penalty"]), int(g["freeKick"]),
+                int(g["video"] is not None)] for g in m["goals"]],
+         "y": [c["playerId"] for c in m["yellowCards"]],
+         "r": [c["playerId"] for c in m["redCards"]]}
+        for m in sorted(matches.values(), key=lambda m: m["date"])])
     write_json(OUT / "players.json", players)
     write_json(OUT / "teams.json", teams)
     write_json(OUT / "tournaments.json", {"circuits": circs, "tournaments": tours})

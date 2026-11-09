@@ -39,6 +39,14 @@ const SCREENS = [
   ['15-curiosidades', '#/curiosidades', 'Racha'],
   ['16-mas', '#/mas', 'Instagram'],
   ['17-no-existe', '#/cualquier-cosa', 'no existe'],
+  ['19-buscar', '#/buscar', 'Probá con'],
+  ['20-buscar-rival', '#/buscar?q=Quilmes', 'Partidos ('],
+  ['21-buscar-jugador', '#/buscar?q=Manuel%20Echegaray', 'Con él en cancha'],
+  ['22-buscar-varios', '#/buscar?q=Echegaray', 'Jugadores'],
+  ['23-estadisticas-club', '#/estadisticas', 'Goleadores'],
+  ['24-estadisticas-filtros', '#/estadisticas?c=1&y=2018', 'Desglose'],
+  ['25-estadisticas-jugador', '#/estadisticas?j=8', 'Socios'],
+  ['26-estadisticas-jugador-cancha', '#/estadisticas?j=8&k=2', 'Goles ('],
 ]
 
 const teams = JSON.parse(readFileSync('public/data/teams.json', 'utf8'))
@@ -92,7 +100,7 @@ try {
         await page.waitForTimeout(2500) // que cargue el reproductor de Drive
       }
       await page.evaluate(() => document.fonts.ready)
-      if (scheme === 'light' || ['01-inicio', '04-partido', '09-jugador', '14-titulos'].includes(name)) {
+      if (scheme === 'light' || ['01-inicio', '04-partido', '09-jugador', '14-titulos', '21-buscar-jugador', '23-estadisticas-club'].includes(name)) {
         await page.screenshot({ path: `${OUT}/${name}${scheme === 'dark' ? '-oscuro' : ''}.png` })
       }
       if (errors.length) fail(`${name}: errores JS: ${errors.join(' | ')}`)
@@ -157,6 +165,8 @@ try {
     ['#/jugadores/8', 'Goles por año'],
     ['#/torneos/9', 'Campeón'],
     ['#/curiosidades', 'Racha'],
+    ['#/buscar?q=Quilmes', 'Partidos ('],
+    ['#/estadisticas?j=8&c=1', 'Socios'],
   ]
   await page.reload()
   for (const [hash, expect] of offlineChecks) {

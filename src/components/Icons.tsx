@@ -70,3 +70,19 @@ export const IconExternal = (p: P) => (
     <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
   </Svg>
 )
+
+export const IconSearch = (p: P) => (
+  <Svg {...p}>
+    <circle cx="10.5" cy="10.5" r="6.5" fill={p.filled ? 'currentColor' : 'none'} fillOpacity={p.filled ? 0.18 : 0} />
+    <path d="m15.5 15.5 5 5" />
+  </Svg>
+)
+
+export const IconChart = (p: P) => (
+  <Svg {...p}>
+    <path d="M4 20h16" />
+    <rect x="5.5" y="11" width="3" height="6.5" rx="1" fill={p.filled ? 'currentColor' : 'none'} fillOpacity={p.filled ? 0.18 : 0} />
+    <rect x="10.5" y="6" width="3" height="11.5" rx="1" fill={p.filled ? 'currentColor' : 'none'} fillOpacity={p.filled ? 0.18 : 0} />
+    <rect x="15.5" y="8.5" width="3" height="9" rx="1" fill={p.filled ? 'currentColor' : 'none'} fillOpacity={p.filled ? 0.18 : 0} />
+  </Svg>
+)

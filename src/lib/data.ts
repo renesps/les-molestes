@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { Fact } from './explore'
 import type { Circuit, Lookups, MatchDetail, MatchSummary, Meta, Player, Stats, Team, Title, Tournament } from './types'
 
 // Rutas relativas: funcionan en GitHub Pages (subcarpeta) y dentro de Capacitor.
@@ -29,6 +30,7 @@ export const api = {
   titles: () => loadJson<Title[]>('titles.json'),
   stats: () => loadJson<Stats>('stats.json'),
   lookups: () => loadJson<Lookups>('lookups.json'),
+  facts: () => loadJson<Fact[]>('facts.json').then((fs) => new Map(fs.map((f) => [f.id, f]))),
 }
 
 /** Datos chicos que casi todas las pantallas necesitan, ya indexados por id. */

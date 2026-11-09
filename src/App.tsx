@@ -18,6 +18,8 @@ const TournamentDetail = lazy(() => import('./screens/Tournaments').then((m) => 
 const Titles = lazy(() => import('./screens/Tournaments').then((m) => ({ default: m.Titles })))
 const Curiosities = lazy(() => import('./screens/Curiosities'))
 const More = lazy(() => import('./screens/More'))
+const SearchScreen = lazy(() => import('./screens/Search'))
+const StatsExplorer = lazy(() => import('./screens/StatsExplorer'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -46,6 +48,8 @@ export default function App() {
               <Route path="/torneos/:id" element={<TournamentDetail />} />
               <Route path="/titulos" element={<Titles />} />
               <Route path="/curiosidades" element={<Curiosities />} />
+              <Route path="/buscar" element={<SearchScreen />} />
+              <Route path="/estadisticas" element={<StatsExplorer />} />
               <Route path="/mas" element={<More />} />
               <Route path="*" element={<Placeholder title="No encontrado" back />} />
             </Routes>
