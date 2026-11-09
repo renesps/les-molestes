@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "data": "python3 scripts/build_data.py",
-    "test:data": "python3 -m unittest discover -s tests -v"
+    "test:data": "python3 -m unittest discover -s tests -v",
+    "e2e": "node scripts/e2e.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -20,6 +21,8 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
+    "axe-core": "^4.14.0",
+    "playwright": "^1.65.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.7",
     "vitest": "^5.1.0"

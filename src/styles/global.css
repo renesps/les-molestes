@@ -341,8 +341,8 @@ a.card:active { transform: scale(0.99); }
 
 .lineup-toggle { width: 100%; min-height: var(--tap-min); border: 0; background: none; text-align: left; font-weight: 600; cursor: pointer; padding: 0; }
 .lineup-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-2); }
-.lineup-cols li { padding: 6px 0; }
-.lineup-cols a { color: var(--text); }
+.lineup-cols a { color: var(--text); display: flex; align-items: center; min-height: var(--tap-min); }
+.lineup-cols li { display: flex; align-items: center; flex-wrap: wrap; column-gap: 4px; }
 
 .pager { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-5); }
 
@@ -413,3 +413,9 @@ a.card:active { transform: scale(0.99); }
 .video-hint { text-align: center; }
 .video-actions { display: flex; gap: var(--space-2); }
 .video-actions .btn { flex: 1; padding: 0 var(--space-3); }
+
+/* Links dentro de un texto: subrayados, para no depender solo del color (WCAG 1.4.1) */
+p a, .muted a, .note a, dd a { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.search input { min-height: var(--tap-min); }
+/* Nombres en filas de goles/tarjetas: área de toque de 44 px sin cambiar el diseño */
+.goal-row .row-main > a, .goal-row .row-main > span:first-child > a { padding-block: 12px; margin-block: -12px; }

@@ -98,3 +98,24 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 - `caco_level` y `toletole` se muestran con el nombre del campo de la base, sin interpretarlos, hasta que me digas qué significan.
 
 **Nombres de jugadores:** por ahora se muestran tal cual están en la base (nombre y apellido), hasta que decidas.
+
+## Hito 5 — Pulido y verificación
+
+**Verificación automática con Playwright** (`npm run build && npm run e2e`). Abre la app compilada en un Chrome de verdad, a 390×844 y como si fuera un celular táctil, y en cada una de las 17 pantallas:
+- saca captura en modo claro (y en oscuro de las principales) → `docs/capturas/`;
+- revisa que no haya errores de JavaScript;
+- pasa la revisión de accesibilidad **axe** (reglas WCAG 2.1 AA);
+- verifica que todo lo que se toca tenga al menos 44 px.
+
+El navegador de la prueba está en hora de Madrid a propósito: así se comprueba que las fechas igual salen en hora de Buenos Aires.
+
+**Modo sin conexión: tenía un error y está corregido.** La primera prueba real falló: el service worker guardaba todo, pero al cortar internet la app quedaba en blanco. El servidor responde con `Vary: Origin` y el JS principal se pide con ese encabezado, así que lo guardado "no coincidía". Ahora se busca ignorando `Vary`. La prueba carga la app una vez, corta internet y abre Inicio, la lista, dos partidos, una ficha, un torneo y Datos curiosos: todo anda.
+
+**Accesibilidad corregida en este hito:**
+- Los links dentro de un texto ("Asistencia: Fulano", "ver ranking") ahora están subrayados, para no depender solo del color.
+- El cuadradito de tarjeta amarilla o roja ahora se anuncia bien en lectores de pantalla.
+- Los nombres de la alineación y de los goleadores tienen un área de toque de 44 px. Se ven igual que antes.
+
+**Auditoría de publicación** (`python3 scripts/audit_public.py`). Busca en todo lo que se publica los IDs del Drive viejo (los de la base y los `old_*` del mapa), los datos de las cuentas del admin, cualquier mail o contraseña y los colores viejos. Resultado: 0 problemas en 553 archivos.
+
+**Capturas:** quedan en `docs/capturas/` (22 imágenes, 3,3 MB). No se publican en la web; son para que veas cómo quedó.

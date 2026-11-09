@@ -7,6 +7,9 @@
 const VERSION = '__VERSION__'
 const CACHE = `les-molestes-${VERSION}`
 const PRECACHE = __PRECACHE__
+// ignoreVary: algunos servidores mandan "Vary: Origin" y los scripts de módulo se piden con Origin;
+// sin esto, lo guardado no coincidiría y la app no arrancaría sin conexión.
+const MATCH = { ignoreSearch: true, ignoreVary: true }
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -30,20 +33,20 @@ self.addEventListener('fetch', (event) => {
 
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req).catch(() => caches.match('./index.html', { ignoreSearch: true }).then((r) => r || caches.match('./'))),
+      fetch(req).catch(() => caches.match('./index.html', MATCH).then((r) => r || caches.match('./', MATCH))),
     )
     return
   }
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const cached = await cache.match(req, { ignoreSearch: true })
+      const cached = await cache.match(req, MATCH)
       const network = fetch(req)
         .then((res) => {
           if (res.ok) cache.put(req, res.clone())
           return res
         })
-        .catch(() => cached)
+        .catch(() => cached || new Response('Sin conexión', { status: 503, statusText: 'Sin conexión' }))
       if (cached) {
         event.waitUntil(network) // revalida en segundo plano
         return cached

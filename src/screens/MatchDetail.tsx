@@ -141,7 +141,7 @@ function Detail({ m, base, all }: { m: M; base: Base; all: MatchSummary[] }) {
           <ul className="list">
             {m.redCards.map((c, i) => (
               <li key={`r${i}`} className="goal-row">
-                <span className="card-icon red" aria-label="Roja" />
+                <span className="card-icon red" role="img" aria-label="Roja" />
                 <span className="row-main">
                   <PlayerLink id={c.playerId} base={base} />
                   <span className="muted small">Roja{c.kind ? ` · ${c.kind.toLowerCase()}` : ''}</span>
@@ -150,7 +150,7 @@ function Detail({ m, base, all }: { m: M; base: Base; all: MatchSummary[] }) {
             ))}
             {m.yellowCards.map((c, i) => (
               <li key={`y${i}`} className="goal-row">
-                <span className="card-icon yellow" aria-label="Amarilla" />
+                <span className="card-icon yellow" role="img" aria-label="Amarilla" />
                 <span className="row-main">
                   <PlayerLink id={c.playerId} base={base} />
                   <span className="muted small">Amarilla</span>
