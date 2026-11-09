@@ -97,7 +97,7 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 - Récord según camiseta, clima y esquema.
 - `caco_level` y `toletole` se muestran con el nombre del campo de la base, sin interpretarlos, hasta que me digas qué significan.
 
-**Nombres de jugadores:** por ahora se muestran tal cual están en la base (nombre y apellido), hasta que decidas.
+**Nombres de jugadores:** completos, tal cual están en la base (decisión de René, 09/11/2026). La web es pública: cualquiera con el link los ve.
 
 ## Hito 5 — Pulido y verificación
 
