@@ -1,0 +1,122 @@
+/*
+ * Tokens de diseño — Club Social y Deportivo Les Molestes
+ * Colores sacados del escudo (scripts/extract_palette.py):
+ *   celeste #5FBDF5 · dorado #C3A166 · blanco #FFFFFF
+ * Los colores del escudo puros NO tienen contraste suficiente como texto sobre
+ * blanco, por eso hay versiones oscuras (--primary, --accent) para texto y botones.
+ * Contraste verificado con scripts/check_contrast.py (WCAG AA).
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Marca (para fondos, bordes, íconos, decoración) */
+  --brand-celeste: #5FBDF5;
+  --brand-gold: #C3A166;
+  --brand-white: #FFFFFF;
+  --on-brand-celeste: #04253A;
+  --on-brand-gold: #2C2211;
+
+  /* Roles — modo claro */
+  --primary: #0A6DA8;            /* celeste oscuro: botones, links, tab activa */
+  --on-primary: #FFFFFF;
+  --primary-container: #E3F3FD;  /* celeste muy suave: chips, fondos destacados */
+  --on-primary-container: #074E78;
+  --accent: #806432;             /* dorado oscuro: texto dorado (títulos, estrellas con texto) */
+  --on-accent: #FFFFFF;
+  --accent-container: #F6EEDF;
+  --on-accent-container: #5C4724;
+
+  --background: #F2F6F9;         /* fondo general (tipo "grouped" de iOS) */
+  --surface: #FFFFFF;            /* tarjetas, listas */
+  --surface-2: #E9F0F5;          /* tarjetas dentro de tarjetas, inputs */
+  --text: #0F1C26;
+  --text-secondary: #4D5E6B;
+  --border: #D5E0E8;
+  --focus-ring: #0A6DA8;
+
+  /* Resultados */
+  --win: #1B7A3A;
+  --win-container: #E2F4E8;
+  --draw: #5D6670;
+  --draw-container: #ECEFF2;
+  --loss: #B3261E;
+  --loss-container: #FBE6E4;
+  --on-result: #FFFFFF;
+
+  /* Barra de pestañas / encabezado */
+  --bar-bg: rgba(255, 255, 255, 0.86);
+  --bar-border: rgba(15, 28, 38, 0.12);
+
+  /* Tipografía: la del sistema (en iPhone, San Francisco). Sin fuentes externas. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Serif para el nombre del club, en el espíritu de las letras del escudo (en iPhone: New York) */
+  --font-display: ui-serif, "New York", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-xs: 0.8125rem;   /* 13 */
+  --text-sm: 0.9375rem;   /* 15 */
+  --text-md: 1.0625rem;   /* 17: cuerpo estándar de iOS */
+  --text-lg: 1.25rem;     /* 20 */
+  --text-xl: 1.75rem;     /* 28 */
+  --text-2xl: 2.125rem;   /* 34: título grande iOS */
+  --leading: 1.4;
+
+  /* Espacios y formas */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --tap-min: 44px;        /* tamaño mínimo tocable (Apple HIG) */
+  --shadow-1: 0 1px 2px rgba(15, 28, 38, 0.06), 0 1px 3px rgba(15, 28, 38, 0.08);
+
+  /* Safe areas de iPhone (notch / barra de inicio) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Roles — modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #5FBDF5;          /* en oscuro el celeste del escudo sí alcanza */
+    --on-primary: #04253A;
+    --primary-container: #0D3550;
+    --on-primary-container: #CDEBFD;
+    --accent: #D4B57A;
+    --on-accent: #2C2211;
+    --accent-container: #3A2F1B;
+    --on-accent-container: #EBD9B4;
+
+    --background: #0A1218;
+    --surface: #132029;
+    --surface-2: #1C2C37;
+    --text: #EDF3F7;
+    --text-secondary: #A3B4C1;
+    --border: #2A3B47;
+    --focus-ring: #5FBDF5;
+
+    --win: #5FCB82;
+    --win-container: #143323;
+    --draw: #AEB7C0;
+    --draw-container: #262F37;
+    --loss: #FF8A80;
+    --loss-container: #3D1A18;
+    --on-result: #0A1218;
+
+    --bar-bg: rgba(19, 32, 41, 0.86);
+    --bar-border: rgba(237, 243, 247, 0.12);
+    --shadow-1: none;
+  }
+}
+
+/* Utilidades base de tipografía */
+.tabular { font-variant-numeric: tabular-nums; }
+.display { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.01em; }

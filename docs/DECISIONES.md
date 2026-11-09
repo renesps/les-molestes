@@ -31,3 +31,17 @@ Cosas que elegí sin preguntarte porque eran razonables. Si alguna no te cierra,
 **Archivos JSON.** Un índice liviano `matches.json` (para la lista y los filtros) y un archivo por partido en `matches/<id>.json` (se carga cuando abrís el partido). Los rankings y datos curiosos ya vienen calculados en `stats.json`. Total: 1,2 MB, pero la pantalla de inicio solo necesita unos pocos KB.
 
 **Tests sin instalar nada.** Los tests usan solo Python (`python3 -m unittest discover -s tests -v`), no hace falta instalar `pytest`.
+
+## Hito 2 — Identidad visual
+
+**Colores del escudo** (sacados con `scripts/extract_palette.py`): celeste `#5FBDF5`, dorado `#C3A166` y blanco. Los colores viejos del admin (`#110A78`, `#F5DD5D`, `#13BEBE`) no se usan; el control de contraste avisa si alguno vuelve a aparecer.
+
+**Por qué hay versiones oscuras.** El celeste y el dorado del escudo son claros: como letra sobre blanco no se leen bien (contraste 2,1:1 y 2,4:1; el mínimo es 4,5:1). Para texto y botones en modo claro uso celeste oscuro `#0A6DA8` y dorado oscuro `#806432`, del mismo tono que los del escudo. En modo oscuro sí alcanza el celeste original. Los colores del escudo tal cual quedan para fondos, bordes y detalles.
+
+**Todos los colores en un solo archivo:** `src/styles/tokens.css`. `python3 scripts/check_contrast.py` revisa 27 combinaciones de texto y fondo en modo claro y oscuro: todas pasan el mínimo WCAG AA. La hoja de muestras está en `docs/paleta.html` (se genera con `scripts/make_palette_preview.py`).
+
+**Fondo de los íconos: celeste profundo `#074E78`.** Probé blanco, celeste, negro y celeste profundo. Sobre celeste el borde del escudo se pierde y el blanco queda pálido en la pantalla de inicio; con el celeste profundo el dorado resalta.
+
+**Tipografía.** La del sistema (en iPhone, San Francisco), así se siente como una app de iOS y no se descarga nada de afuera. Para el nombre del club uso la serif del sistema (en iPhone, "New York"), que recuerda a las letras del escudo. Los números de estadísticas usan cifras de ancho fijo (`.tabular`) para que las columnas queden alineadas.
+
+**Íconos generados** (`scripts/make_icons.py`): `public/logo.png` (20 KB, transparente), íconos de la PWA de 192 y 512 (normal y "maskable", con el escudo dentro de la zona segura para que Android no lo recorte), `apple-touch-icon.png` de 180, favicons, y para Capacitor `resources/icon.png` (1024, sin transparencia, como pide la App Store) más `splash.png` / `splash-dark.png` (2732).
