@@ -8,6 +8,10 @@ Dirección final: **https://renesps.github.io/les-molestes/**
 
 ---
 
+## Estado
+
+✅ **Publicada el 09/11/2026** en https://renesps.github.io/les-molestes/ (repo: https://github.com/renesps/les-molestes). Lo que sigue es para referencia o por si hay que rehacerlo.
+
 ## Opción A: que lo haga Claude (lo más fácil)
 
 Tu computadora ya tiene GitHub conectado con la cuenta **renesps**. Pedile a Claude "publicalo" y él:
@@ -77,5 +81,12 @@ La web se actualiza sola. En los celulares donde ya estaba instalada se actualiz
 ## Si algo sale mal
 
 - **La publicación terminó con una ❌ roja:** entrá al paso que falló en la pestaña *Actions* y leé el mensaje. Antes de publicar, GitHub corre los mismos controles que en tu compu: las cifras de los datos, que no se publique nada privado, el contraste de colores y los tests. Si alguno no da, no publica (a propósito). Pasale el mensaje a Claude.
+- **Falló con "Internal server error" y el paso "deploy" ni arrancó:** es un error de GitHub, no del proyecto (pasó en la primera publicación, el 09/11/2026). Se arregla borrando el entorno de publicación y volviendo a correr:
+  ```bash
+  gh api -X DELETE repos/renesps/les-molestes/environments/github-pages
+  ```
+  ```bash
+  gh workflow run "Publicar en GitHub Pages" --repo renesps/les-molestes
+  ```
 - **La página dice 404:** revisá que en *Settings → Pages* la fuente sea **GitHub Actions** y que la última publicación tenga tilde verde.
 - **Veo una versión vieja:** cerrá la app y volvé a abrirla con internet. En la compu, recargá con Cmd+Shift+R.
